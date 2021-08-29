@@ -319,8 +319,15 @@ public class EmployeeHomepage extends javax.swing.JFrame {
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
+        btn_close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee/images/Exit.png"))); // NOI18N
         btn_close.setText("CLOSE");
+        btn_close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_closeActionPerformed(evt);
+            }
+        });
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee/images/Clear-icon.png"))); // NOI18N
         jButton1.setText("CLEAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -529,6 +536,16 @@ public class EmployeeHomepage extends javax.swing.JFrame {
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btn_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_closeActionPerformed
+        // TODO add your handling code here:
+        try {
+            LogIn ob = new LogIn();
+            ob.setVisible(true);
+            this.dispose();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btn_closeActionPerformed
 
     /**
      * @param args the command line arguments

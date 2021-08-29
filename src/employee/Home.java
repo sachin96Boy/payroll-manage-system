@@ -278,7 +278,13 @@ public class Home extends javax.swing.JFrame {
             LogIn ob = new LogIn();
             ob.setVisible(true);
             this.dispose();
-            String sql = "SELECT * FROM userlog WHERE Username = '" + loggedinId.empname + "' AND Id='" + loggedinId.impId + "'";
+            
+            String userName = loggedinId.empname;
+            int userId = loggedinId.impId;
+            
+            
+            
+            String sql = "SELECT * FROM userlog WHERE Username = '" + userName + "' AND Id='" + userId + "'";
             pst = conn.prepareStatement(sql);
 
             rs = pst.executeQuery();
@@ -291,7 +297,7 @@ public class Home extends javax.swing.JFrame {
                 SimpleDateFormat df2 = new SimpleDateFormat("HH:mm:ss");
                 String stringtime = df2.format(time);
 
-                String sql1 = "INSERT INTO Audit(username,time,status,id)VALUES('" + loggedinId.empname + "','" + stringdate + "/" + stringtime + "','" + "logged out" + "','" + loggedinId.impId + "')";
+                String sql1 = "INSERT INTO Audit(username,time,status,id)VALUES('" + userName + "','" + stringdate + "/" + stringtime + "','" + "logged out" + "','" + loggedinId.impId + "')";
                 pst = conn.prepareStatement(sql1);
                 pst.execute();
             }

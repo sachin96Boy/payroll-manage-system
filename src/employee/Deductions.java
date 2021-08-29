@@ -5,14 +5,22 @@
  */
 package employee;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -425,18 +433,18 @@ public class Deductions extends javax.swing.JFrame {
             pst = conn.prepareStatement(sql);
             pst.setString(1, userId);
             pst.setString(2, first_name);
-            pst.setString(3, first_name);
-            pst.setString(4, sur_name);
-            pst.setString(5, salary);
-            pst.setString(6, total_deduc);
-            pst.setString(7, reason);
-            pst.setString(8, employee_id);
-            pst.setString(9, loggedInAs);
+//            pst.setString(3, first_name);
+            pst.setString(3, sur_name);
+            pst.setString(4, salary);
+            pst.setString(5, total_deduc);
+            pst.setString(6, reason);
+            pst.setString(7, employee_id);
+            pst.setString(8, loggedInAs);
 
             pst.execute();
             JOptionPane.showMessageDialog(null, "Deductions Successfully recorded");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -533,6 +541,45 @@ public class Deductions extends javax.swing.JFrame {
 
     private void btn_analiticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_analiticActionPerformed
         // TODO add your handling code here:
+        
+        ArrayList<String> namelist = new ArrayList<String>();
+        ArrayList<String> deductionamountList = new ArrayList<String>();
+        
+        try {
+           String sql = "SELECT FirstName, deduction_amount FROM deductions";
+           
+           pst = conn.prepareStatement(sql);
+           rs = pst.executeQuery();
+           
+            while (rs.next()) {                
+                namelist.add(rs.getString("FirstName"));
+                deductionamountList.add(rs.getString("deduction_amount"));
+            }
+            
+           DefaultCategoryDataset barchartdata = new DefaultCategoryDataset();
+           
+           for(int i=0; i<namelist.size(); i++){
+               barchartdata.setValue(Double.parseDouble(deductionamountList.get(i)), "Amount", namelist.get(i));
+           }
+           
+            JFreeChart barchart = ChartFactory.createBarChart("Deductions Graph", "Person", "Amount", barchartdata, PlotOrientation.VERTICAL, false, true, false);
+            
+            CategoryPlot barchartcategory = barchart.getCategoryPlot();
+            
+            barchartcategory.setRangeGridlinePaint(Color.blue);
+            ChartPanel barpannel = new ChartPanel(barchart);
+            
+            DeductionGraphform deductiongraphform = new DeductionGraphform();
+            deductiongraphform.setVisible(true);
+            
+            deductiongraphform.GraphPlane.removeAll();
+            deductiongraphform.GraphPlane.add(barpannel, BorderLayout.CENTER);
+            deductiongraphform.GraphPlane.validate();
+           
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
     }//GEN-LAST:event_btn_analiticActionPerformed
 
     /**
